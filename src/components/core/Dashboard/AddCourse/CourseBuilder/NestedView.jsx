@@ -8,6 +8,7 @@ import {AiOutlinePlus} from "react-icons/ai"
 import SubSectionModal from "./SubSectionModal"
 import {deleteSection, deleteSubSection} from "../../../../../services/operations/courseDetailsAPI"
 import {setCourse} from "../../../../../slices/courseSlice"
+import ConfirmationModal from "../../../../common/ConfirmationModal"
 
 const NestedView = ({handleChangeEditSectionName}) => {
     const {course} = useSelector((state) =>  state.course);
@@ -40,15 +41,17 @@ const NestedView = ({handleChangeEditSectionName}) => {
         const result = await deleteSubSection(subSectionId, sectionId, token);
         if(result) {
             // TODO: or kya extra kr skte h yaha pr
-            
-            dispatch(setCourse(result));
+            const updatedCourseContent = course.courseContent.map((section) => 
+            section._id === sectionId ? result : section);
+            const updatedCourse = {...course, courseContent: updatedCourseContent};
+            dispatch(setCourse(updatedCourse));
         }
         setConfirmationModal(null);
     }
     return(
-        <div className="text-white bg-richblack-400">
+        <div className="">
 
-            <div>
+            <div className=" bg-richblack-600 rounded-md mt-1 p-2">
                 {course?.courseContent?.map((section) => (
                 <details key={section._id} open>
                     
@@ -160,7 +163,7 @@ const NestedView = ({handleChangeEditSectionName}) => {
                 confirmationModal ? 
 
                 (
-                    <confirmationModal modalData={confirmationModal}/>
+                    <ConfirmationModal modalData={confirmationModal}/>
                 )
                 :
                 (<div></div>)

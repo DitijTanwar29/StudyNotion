@@ -1,6 +1,6 @@
 const Section = require("../models/Section");
 const Course = require("../models/Course");
-// const SubSectionModal  = require("../../src/components/core/Dashboard/AddCourse/CourseBuilder/SubSectionModal");
+const SubSection = require("../models/SubSection");
 
 exports.createSection = async (req, res) => {
     try{
@@ -15,13 +15,13 @@ exports.createSection = async (req, res) => {
         }
         //create section
         const newSection = await Section.create({sectionName});
-        //update the course with section ObjectId
+        //update the courseContent with section's ObjectId
         const updatedCourseDetails = await Course.findByIdAndUpdate(
                                             courseId,
                                             {
                                                 $push:{
                                                     courseContent:newSection._id,
-                                                }
+                                                },
                                             },
                                             {new:true}
         ).populate({
@@ -55,7 +55,7 @@ exports.updateSection = async (req, res) => {
     try{
 
         //  data fetch
-        const {sectionName, sectionId} = req.body;
+        const {sectionName, sectionId, courseId} = req.body;
         // validate data 
         if(!sectionName || !sectionId) {
             return res.status(400).json({
@@ -65,10 +65,21 @@ exports.updateSection = async (req, res) => {
         }
         //update data
         const section = await Section.findByIdAndUpdate(sectionId, {sectionName}, {new:true} );
+
+        const course = await Course.findById(courseId)
+        .populate({
+            path:"courseContent",
+            populate:{
+                path:"subSection",
+                },
+            })
+            .exec();
+
         //return res
         return res.status(200).json({
             success:true,
             message:'Section Updated Successfully',
+            data:course,
         });
     } catch(err) {
         return res.status(500).json({
@@ -99,7 +110,7 @@ exports.deleteSection = async (req, res) => {
             })
         }
         //delete sub Section 
-        await SubSectionModal.deleteMany({_id: {$in: section.subSection}});
+        await SubSection.deleteMany({_id: {$in: section.subSection}});
 
         await Section.findByIdAndDelete(sectionId);
 

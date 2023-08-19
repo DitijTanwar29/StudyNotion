@@ -52,10 +52,10 @@ const CourseBuilderForm = () => {
       },
       token
     );
-    // const response = await result.json();
+    
 
-    console.log("Inside else statement");
-    console.log("result - ", result);
+    // console.log("Inside else statement");
+    // console.log("result - ", result);
 
       }
 
@@ -105,11 +105,11 @@ const CourseBuilderForm = () => {
     setValue("sectionName", sectionName);
   };
 
-  console.log(
-    "logging the length of course content - ",
-    course.courseContent.length
-  );
-  console.log("course", course);
+  // console.log(
+  //   "logging the length of course content - ",
+  //   course.courseContent.length
+  // );
+  // console.log("course", course);
   return (
     <div className="text-white">
       <p>Course Builder</p>

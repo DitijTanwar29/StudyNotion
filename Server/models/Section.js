@@ -4,7 +4,6 @@ const sectionSchema = new mongoose.Schema({
 
     sectionName: {
         type: String,
-        require: true,
     },
     subSection: [
         {

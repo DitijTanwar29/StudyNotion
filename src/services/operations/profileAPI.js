@@ -16,7 +16,7 @@ export async function getUserEnrolledCourses (token) {
     try{
         const response = await apiConnector("GET", GET_USER_ENROLLED_COURSES_API, null,
         {
-            Authorisation: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`, 
         })
 
         console.log("Printing response of Get_User_Enrolled_Courses_Api api.........", response);
