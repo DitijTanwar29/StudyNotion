@@ -2,59 +2,75 @@ const SubSection = require("../models/SubSection");
 const Section = require("../models/Section");
 const Course = require("../models/Course");
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
+const User = require ("../models/User");
 
 //create Subsection
-// exports.createSubSection = async (req, res) => {
-//     try{
-//         //fetch data from req body
-//         const {sectionId, title, description} = req.body;
-//         //extract file/video
-//         const video = req.files.videoFile;
-//         //validation
-//         if (!sectionId || !title || !description || !video) {
-//             return res.status(404).json({
-//                 success:false,
-//                 message:'All fields are required',
-//             });
-//         }
-//         console.log("sectionId", sectionId);
-//         console.log("title", title);
-//         console.log("description", description);
-//         console.log("video - ",video);
-//         console.log("time duration - ", timeDuration);
-//         //upload video to cloudinary
-//         const uploadDetails = await uploadImageToCloudinary(video, process.env.FOLDER_NAME);
-//         //create a subsection
-//         const subSectionDetails = await SubSection.create({
-//             title: title,
-//             timeDuration: `${uploadDetails.duration}`,
-//             description: description,
-//             videoUrl: uploadDetails.secure_url,
-//         })
-//         console.log("subsectiondetails",subSectionDetails)
-//         //update section with this Sub-Section Object ID
-//         const updatedSection = await Section.findByIdAndUpdate({_id: sectionId},
-//                                                     {$push:{
-//                                                         subSection: subSectionDetails._id,
-//                                                     }},
-//                                                     {new:true})
-//                                                     .populate("subSection")
-//         console.log("updated Section after course creation - ", updatedSection);
-//         //return response
-//         return res.status(200).json({
-//             success:true,
-//             message:'Subsection Created Successfully',
-//             data:updatedSection,
-//         });
+exports.createSubSection = async (req, res) => {
+    try{
+        //fetch data from req body
+        const { title, description, sectionId, courseId} = req.body;
+        // const  = "64e330303d886a8738e0d172";
+        // const  = "648366c3c283a46a485cf380";
+        //extract file/video
+        const video = req.files.video;
+        //validation
+        if (!sectionId || !title || !description || !video) {
+            return res.status(404).json({
+                success:false,
+                message:'All fields are required',
+            });
+        }
+        // const userId = req.user.id;
+        // console.log("user id - ", userId);
+        // const userPresent = User.findById(userId);
+        
+        // console.log("current courrent course id - ")
+        console.log("sectionId", sectionId);
+        // console.log("title", title);
+        // console.log("description", description);
+        // console.log("video - ",video);
+        console.log("course Id - ", courseId);
+        // console.log("time duration - ", timeDuration);
+        //upload video to cloudinary
+        const uploadDetails = await uploadImageToCloudinary(video, process.env.FOLDER_NAME);
+        //create a subsection
+        const subSectionDetails = await SubSection.create({
+            title: title,
+            timeDuration: `${uploadDetails.duration}`,
+            description: description,
+            videoUrl: uploadDetails.secure_url,
+        })
+        console.log("subsectiondetails",subSectionDetails)
+        //update section with this Sub-Section Object ID
+        const updatedSection = await Section.findByIdAndUpdate({_id: sectionId},
+                                                    {$push:{
+                                                        subSection: subSectionDetails._id,
+                                                    }},
+                                                    {new:true})
+                                                    .populate("subSection")
+        const updatedCourse = await Course.findById(courseId)
+                                                    .populate({
+                                                        path:"courseContent",
+                                                        populate: {
+                                                            path:"subSection",
+                                                        }
+                                                    })
+        console.log("updated Course after subSection creation - ", updatedCourse);
+        //return response
+        return res.status(200).json({
+            success:true,
+            message:'Subsection Created Successfully',
+            data:updatedCourse,
+        });
 
-//     } catch(error) {
-//         return res.status(500).json({
-//             success:false,
-//             message:'Internal Server Error',
-//             error:error.message,
-//         });
-//     }
-// }; 
+    } catch(error) {
+        return res.status(500).json({
+            success:false,
+            message:'Internal Server Error',
+            error:error.message,
+        });
+    }
+}; 
 
   
 
