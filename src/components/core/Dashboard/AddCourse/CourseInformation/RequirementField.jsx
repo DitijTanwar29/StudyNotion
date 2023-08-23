@@ -31,16 +31,16 @@ const RequirementField = ({name, label, register, errors, setValue, getValues}) 
         setRequirementList(updatedRequirementList);
     }
     return(
-        <div>
+        <div className="">
 
-            <label htmlFor={name}>{label}<sup>*</sup></label>
+            <label htmlFor={name}>{label}<sup className="text-pink-200">*</sup></label>
             <div>
                 <input
                 type="text"
                 id={name}
                 value={requirement}
                 onChange={(e) => setRequirement(e.target.value)}
-                className="w-full"
+                className="w-full form-style"
                 
                 />
                 <button

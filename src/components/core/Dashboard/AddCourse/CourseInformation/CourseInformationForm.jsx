@@ -159,12 +159,12 @@ const CourseInformationForm = () => {
         className="ronded-md border-r-richblack-700 bg-richblack-800 p-6 space-y-8"
         >
             <div>
-                <label htmlFor="courseTitle">Course Title<sup>*</sup></label>
+                <label htmlFor="courseTitle">Course Title<sup className="text-pink-200">*</sup></label>
                 <input
                 id="courseTitle"
                 placeholder="Enter Course Title"
                 {...register("courseTitle", {required:true})}
-                className="w-full"
+                className="w-full form-style"
                 /> 
                 {
                     errors.courseTitle && (
@@ -173,12 +173,12 @@ const CourseInformationForm = () => {
                 }
             </div>
             <div>
-                <label htmlFor="courseShortDesc">Course Short Description<sup>*</sup></label>
+                <label htmlFor="courseShortDesc">Course Short Description<sup className="text-pink-200">*</sup></label>
                 <textarea
                 id="courseShortDesc"
                 placeholder="Enter Description"
                 {...register("courseShortDesc",{required:true})}
-                className="min-h-[140px] w-full"
+                className="min-h-[140px] w-full form-style"
 
                 />
                 {
@@ -188,7 +188,7 @@ const CourseInformationForm = () => {
                 }
             </div>
             <div className="relative">
-                <label htmlFor="coursePrice">Course Price</label>
+                <label htmlFor="coursePrice">Course Price</label><sup className="text-pink-200">*</sup>
                 <input
 
                 id="coursePrice"
@@ -197,7 +197,7 @@ const CourseInformationForm = () => {
                         required:true,
                     valueAsNumber:true,
                     })}
-                className=" w-full"
+                className=" w-full form-style"
                 
                 />
                 <HiOutlineCurrencyRupee className="absolute top-1/2 text-richblack-400"  />
@@ -208,12 +208,12 @@ const CourseInformationForm = () => {
                 }
             </div>
             <div>
-                <label htmlFor="courseCategory">Course Category<sup>*</sup></label>
+                <label htmlFor="courseCategory">Course Category<sup className="text-pink-200">*</sup></label>
                 <select
                 id="courseCategory"
                 defaultValue=""
                 {...register("courseCategory",{required:true})}
-                className="text-richblack-400"
+                className="text-richblack-400 form-style"
                 >
 
                 <option value="" disabled>Choose a Category</option>
@@ -244,6 +244,7 @@ const CourseInformationForm = () => {
                 errors={errors}
                 setValue={setValue}
                 getValues={getValues} 
+                
                 />
 
                
@@ -260,12 +261,12 @@ const CourseInformationForm = () => {
                 />
                 {/* Benefts of the coUrse */}
                 <div>
-                    <label htmlFor="courseBenefits">Benefits of the course</label>
+                    <label htmlFor="courseBenefits">Benefits of the course</label><sup className="text-pink-200">*</sup>
                     <textarea
                     id="courseBenefits"
                     placeholder="Enter Benefits of the course"
                     {...register("courseBenefits", {required:true})}
-                    className="min-h-[130px] w-full"
+                    className="min-h-[130px] w-full form-style"
                     
                     />
                     {errors.courseBenefits && (
@@ -279,7 +280,7 @@ const CourseInformationForm = () => {
                 errors={errors}
                 setValue={setValue}
                 getValues={getValues}                
-                
+                // className="form-style"
                 />
 
                 <div>
