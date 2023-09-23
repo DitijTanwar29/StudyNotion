@@ -250,7 +250,7 @@ const CourseInformationForm = () => {
                
 
                 {/* Create a component for uploading and showing preview of image */}
-                < Upload
+                <Upload
                     name="courseImage"
                     label="Course Thumbnail"
                     register={register}

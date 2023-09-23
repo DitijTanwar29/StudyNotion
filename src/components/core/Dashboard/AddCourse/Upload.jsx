@@ -25,6 +25,7 @@ export default function Upload({
 
   const onDrop = (acceptedFiles) => {
     const file = acceptedFiles[0]
+    console.log("accepted file - ", file)
     if (file) {
       previewFile(file)
       setSelectedFile(file)
@@ -39,7 +40,7 @@ export default function Upload({
   })
 
   const previewFile = (file) => {
-    // console.log(file)
+    console.log("preview file data from frontend - ",file)
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onloadend = () => {
@@ -54,6 +55,7 @@ export default function Upload({
 
   useEffect(() => {
     setValue(name, selectedFile)
+    console.log("selectedFile - ", selectedFile);;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFile, setValue])
 

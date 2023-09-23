@@ -98,6 +98,7 @@ const NestedView = ({handleChangeEditSectionName}) => {
                                     </div>
 
                                     <div
+                                    onClick={(e) => e.stopPropagation()}
                                     className="flex items-center gap-x-3"
                                     >
                                         <button

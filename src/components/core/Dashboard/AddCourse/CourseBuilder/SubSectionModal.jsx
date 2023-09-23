@@ -34,8 +34,9 @@ const SubSectionModal = ({
 
   useEffect(() => {
     if (view || edit) {
+      console.log("modal Data - ", modalData)
       setValue("lectureTitle", modalData.title);
-      setValue("lectureDesc", modalData.Description);
+      setValue("lectureDesc", modalData.description);
       setValue("lectureVideo", modalData.videoUrl);
     }
   }, []);
@@ -44,7 +45,7 @@ const SubSectionModal = ({
     const currentValues = getValues();
     if (
       currentValues.lectureTitle !== modalData.title ||
-      currentValues.lectureDesc !== modalData.Description ||
+      currentValues.lectureDesc !== modalData.description ||
       currentValues.lectureVideo !== modalData.videoUrl
     ) {
       return true;
@@ -83,9 +84,12 @@ const SubSectionModal = ({
       const updatedCourse = { ...course, courseContent: updatedCourseContent };
       dispatch(setCourse(updatedCourse));
     }
+    setModalData(null);
+    setLoading(false);
   };
 
   const onSubmit = async (data) => {
+    console.log("form data on submit - ", data)
     if (view) return;
 
     if (edit) {
@@ -98,12 +102,13 @@ const SubSectionModal = ({
       return;
     }
 
-	// ADD
+	// Create subSection
     const formData = new FormData();
+
     formData.append("sectionId", modalData);
     formData.append("title", data.lectureTitle);
     formData.append("description", data.lectureDesc);
-    formData.append("videoUrl", data.lectureVideo);
+    formData.append("video", data.lectureVideo);
     setLoading(true);
 
     //API CALL
@@ -122,20 +127,23 @@ const SubSectionModal = ({
     setLoading(false);
   };
   return (
-    <div>
-      <div>
-        <div>
-          <p>
+    <div className ="fixed inset-0 z-[1000] !mt-0 grid h-screen w-screen place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm">
+      <div className="my-10 w-11/12 max-w-[700px] rounded-lg border border-richblack-400 bg-richblack-800">
+        {/* Modal header */}
+        <div className="flex items-center justify-between rounded-t-lg bg-richblack-700 p-5">
+          <p className="text-xl font-semibold text-richblack-5">
             {edit && "Editing"} {view && "Viewing"} {add && "Adding"} Lecture
           </p>
           <button onClick={() => (!loading ? setModalData(null) : {})}>
             <RxCross1 />
           </button>
         </div>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        {/* Modal Form */}
+        <form onSubmit={handleSubmit(onSubmit)}
+          className="space-y-8 px-8 py-10">
           <Upload
             name="lectureVideo"
-            label="LectureVideo"
+            label="Lecture Video"
             register={register}
             setValue={setValue}
             errors={errors}
@@ -144,29 +152,32 @@ const SubSectionModal = ({
             editData={edit ? modalData.videoUrl : null}
           />
           <div>
-            <label>Lecture Title</label>
+            <label htmlFor="lectureTitle">Lecture Title</label><sup className="text-pink-200">*</sup>
             <input
+              disabled={view || loading}
               id="lectureTitle"
               placeholder="Enter lecture title"
               {...register("lectureTitle", { required: true })}
-              className="w-full "
+              className="w-full form-style "
             />
-            {errors.lectureTitle && <span>Lecture Title is required</span>}
+            {errors.lectureTitle && <span className="ml-2 text-xs tracking-wide text-pink-200">Lecture Title is required</span>}
           </div>
           <div>
-            <label>Lecture Description</label>
+            <label htmlFor="lectureDesc">Lecture Description</label><sup className="text-pink-200">*</sup>
             <textarea
               id="lectureDesc"
               placeholder="Enter lecture description"
               {...register("lectureDesc", { required: true })}
-              className="w-full min-h[130px]"
+              className="w-full form-style resize-x-none min-h[130px]"
             />
-            {errors.lectureDesc && <span>Lecture Description is required</span>}
+            {errors.lectureDesc && <span className="ml-2 text-xs tracking-wide text-pink-200">Lecture Description is required</span>}
           </div>
 
           {!view && (
             <div>
-              <IconBtn text={edit ? "Save Changes" : "Save"} />
+              <IconBtn text={edit ? "Save Changes" : "Save"} 
+                disabled={loading}
+              />
             </div>
           )}
         </form>
